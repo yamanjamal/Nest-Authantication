@@ -2,7 +2,7 @@
 import { plainToInstance } from 'class-transformer';
 import { IsString, validateSync } from 'class-validator';
 
-class EnvironmentVariables {
+export class EnvironmentVariables {
   // JWT
   @IsString()
   JWT_SECRET: string;

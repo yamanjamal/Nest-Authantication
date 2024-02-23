@@ -4,7 +4,6 @@ import { PrismaModule } from 'prisma/prisma.module';
 import { UsersModule } from './users/users.module';
 import { ConfigModule } from '@nestjs/config';
 import { validate } from './env.validation';
-import jwtConfig from './commons/config/jwt.config';
 
 @Module({
   imports: [
@@ -14,7 +13,6 @@ import jwtConfig from './commons/config/jwt.config';
     ConfigModule.forRoot({
       isGlobal: true,
       validate,
-      load: [jwtConfig],
     }),
   ],
 })

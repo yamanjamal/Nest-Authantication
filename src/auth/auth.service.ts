@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  ForbiddenException,
-  Injectable,
-} from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { SignupDto } from './dto/signup.dto';
 import { LoginDto } from './dto/login.dto';
 import { PrismaService } from 'prisma/prisma.service';
@@ -56,15 +52,13 @@ export class AuthService {
       sub: user.id,
       email: user.email,
     });
-    if (!token) {
-      throw new ForbiddenException();
-    }
+
     res.cookie('token', token);
-    return res.send({ message: 'logged in successfuly' });
+    return { message: 'logged in successfuly' };
   }
 
   async logout(req: Request, res: Response) {
     res.clearCookie('token');
-    return res.send({ message: 'logged out successfuly' });
+    return { message: 'logged out successfuly' };
   }
 }
