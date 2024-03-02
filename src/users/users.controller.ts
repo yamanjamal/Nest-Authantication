@@ -7,17 +7,23 @@ import {
   Delete,
   UseGuards,
   Query,
+  Inject,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { FindAllQuery } from './dto/find-all.query';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 
 @ApiTags('users')
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+  ) {}
 
   @Get()
   @UseGuards(AuthGuard)
@@ -25,10 +31,12 @@ export class UsersController {
   @ApiOkResponse({
     description: 'Get all users in the system',
   })
-  findAll(
+  async findAll(
     @Query()
     query: FindAllQuery,
   ) {
+    const value = await this.cacheManager.get('users');
+    console.log(value);
     return this.usersService.findAll(query);
   }
 
