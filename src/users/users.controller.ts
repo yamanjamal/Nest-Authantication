@@ -17,7 +17,9 @@ import { FindAllQuery } from './dto/find-all.query';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 import { User } from '@prisma/client';
-import { CurrentUser } from 'src/commen/decorators';
+import { CurrentUser, Roles } from 'src/commen/decorators';
+import { UserRolesEnum } from 'src/commen/enums/role.enum';
+import { RolesGuard } from 'src/commen/guards';
 
 @ApiTags('users')
 @Controller('users')
@@ -28,7 +30,8 @@ export class UsersController {
   ) {}
 
   @Get()
-  @UseGuards(AuthGuard)
+  @Roles(UserRolesEnum.User)
+  @UseGuards(AuthGuard, RolesGuard)
   @ApiOperation({ summary: 'Get all users in the system' })
   @ApiOkResponse({
     description: 'Get all users in the system',
@@ -43,7 +46,8 @@ export class UsersController {
   }
 
   @Get(':id')
-  @UseGuards(AuthGuard)
+  @Roles(UserRolesEnum.User)
+  @UseGuards(AuthGuard, RolesGuard)
   @ApiOperation({ summary: 'Get user by id' })
   @ApiOkResponse({
     description: 'Get user by id',
@@ -54,7 +58,8 @@ export class UsersController {
   }
 
   @Patch(':id')
-  @UseGuards(AuthGuard)
+  @Roles(UserRolesEnum.User)
+  @UseGuards(AuthGuard, RolesGuard)
   @ApiOperation({ summary: 'update user by id' })
   @ApiOkResponse({
     description: 'update user by id',
@@ -64,7 +69,8 @@ export class UsersController {
   }
 
   @Delete(':id')
-  @UseGuards(AuthGuard)
+  @Roles(UserRolesEnum.User)
+  @UseGuards(AuthGuard, RolesGuard)
   @ApiOperation({ summary: 'delete user by id' })
   @ApiOkResponse({
     description: 'delete user by id',
