@@ -4,14 +4,19 @@ import { PrismaService } from 'prisma/prisma.service';
 import { MyLoggerService } from 'src/my-logger/my-logger.service';
 import { User } from '@prisma/client';
 import { FindAllQuery } from './dto/find-all.query';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { UserUpdatedEvent } from './events/user-updated.event';
 
 @Injectable()
 export class UsersService {
   private readonly logger = new MyLoggerService(UsersService.name);
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly eventEmitter: EventEmitter2,
+  ) {}
 
   async findAll(query: FindAllQuery) {
-    this.logger.log(`findAll\t`, UsersService.name);
+    this.logger.log(`UsersService:findAll\t`, UsersService.name);
     const { skip, take, cursor, where, orderBy } = query;
     return this.prismaService.user.findMany({
       skip,
@@ -23,14 +28,21 @@ export class UsersService {
   }
 
   async findOne(id: number): Promise<User | null> {
-    this.logger.log(`findOne\t`, UsersService.name);
+    this.logger.log(`UsersService:findOne\t`, UsersService.name);
     return this.prismaService.user.findUnique({
       where: { id },
     });
   }
 
   async update(id: number, dto: UpdateUserDto) {
-    this.logger.log(`update\t`, UsersService.name);
+    this.logger.log(`UsersService:update\t`, UsersService.name);
+    this.eventEmitter.emit(
+      'user.updated',
+      new UserUpdatedEvent(
+        'user update',
+        'update the user information from the user serivce',
+      ),
+    );
     return this.prismaService.user.update({
       where: { id },
       data: {
@@ -40,7 +52,7 @@ export class UsersService {
   }
 
   async remove(id: number) {
-    this.logger.log(`remove\t`, UsersService.name);
+    this.logger.log(`UsersService:remove\t`, UsersService.name);
     return this.prismaService.user.delete({
       where: { id },
     });

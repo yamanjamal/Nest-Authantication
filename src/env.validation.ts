@@ -8,6 +8,14 @@ export class EnvironmentVariables {
   JWT_SECRET: string;
   @IsString()
   TOKEN_EXPIRATION_TIME: string;
+  @IsString()
+  AWS_ACCESS_KEY_ID: string;
+  @IsString()
+  AWS_SECRET_ACCESS_KEY: string;
+  @IsString()
+  AWS_S3_REGION: string;
+  @IsString()
+  AWS_BUCKET: string;
 }
 
 export function validate(config: Record<string, unknown>) {

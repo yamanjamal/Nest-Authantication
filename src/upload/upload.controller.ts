@@ -26,7 +26,7 @@ export class UploadController {
     status: HttpStatus.CREATED,
     description: 'Successfully uploaded file to s3',
   })
-  @UseInterceptors(FilesInterceptor('file'))
+  @UseInterceptors(FilesInterceptor('files'))
   async uploadS3(
     @UploadedFiles()
     file: Express.Multer.File,
@@ -51,9 +51,9 @@ export class UploadController {
         .addFileTypeValidator({
           fileType: 'png',
         })
-        .addMaxSizeValidator({
-          maxSize: 10000,
-        })
+        // .addMaxSizeValidator({
+        //   maxSize: 10000,
+        // })
         .build({
           errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
         }),

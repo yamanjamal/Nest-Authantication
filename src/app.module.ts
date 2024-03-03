@@ -6,9 +6,10 @@ import { ConfigModule } from '@nestjs/config';
 import { validate } from './env.validation';
 import { MyLoggerModule } from './my-logger/my-logger.module';
 import { UploadModule } from './upload/upload.module';
-import { MulterModule } from '@nestjs/platform-express';
 import { CacheInterceptor, CacheModule } from '@nestjs/cache-manager';
 import { APP_INTERCEPTOR } from '@nestjs/core';
+import { EventEmitterModule } from '@nestjs/event-emitter';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -17,11 +18,10 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
     PrismaModule,
     MyLoggerModule,
     UploadModule,
+    EventEmitterModule.forRoot(),
+    ScheduleModule.forRoot(),
     CacheModule.register({
       isGlobal: true,
-    }),
-    MulterModule.register({
-      dest: './uploads',
     }),
     ConfigModule.forRoot({
       isGlobal: true,

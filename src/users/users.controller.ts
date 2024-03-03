@@ -16,6 +16,8 @@ import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { FindAllQuery } from './dto/find-all.query';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
+import { User } from '@prisma/client';
+import { CurrentUser } from 'src/commen/decorators';
 
 @ApiTags('users')
 @Controller('users')
@@ -46,7 +48,8 @@ export class UsersController {
   @ApiOkResponse({
     description: 'Get user by id',
   })
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: string, @CurrentUser() currentUser: User) {
+    console.log(currentUser);
     return this.usersService.findOne(+id);
   }
 
